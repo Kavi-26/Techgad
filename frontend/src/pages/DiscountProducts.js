@@ -28,7 +28,7 @@ const DiscountProducts = () => {
   };
 
   const handlePayment = (product) => {
-    navigate("/payment", { state: { product } });
+    navigate("/payments", { state: { product } });
   };
 
   return (
@@ -62,12 +62,16 @@ const DiscountProducts = () => {
                   <li key={index}>{point.trim()}</li>
                 ))}
               </ul>
-              <button
-                style={styles.paymentButton}
-                onClick={() => handlePayment(product)}
-              >
-                Buy Now 
-              </button>
+              {product.stock > 0 ? (
+                <button
+                  style={styles.paymentButton}
+                  onClick={() => handlePayment(product)}
+                >
+                  Buy Now
+                </button>
+              ) : (
+                <p style={styles.outOfStock}>Out of Stock</p>
+              )}
             </div>
           ))
         ) : (
@@ -119,7 +123,7 @@ const styles = {
     marginBottom: "15px",
   },
   productImage: {
-    width: "100%",
+    width: "250px",
     height: "250px",
     objectFit: "cover",
     transition: "transform 0.3s ease-in-out",

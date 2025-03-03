@@ -15,6 +15,7 @@ const Admin = () => {
   const [discountCategory, setDiscountCategory] = useState("");
   const [discountDescription, setDiscountDescription] = useState("");
   const [discountImage, setDiscountImage] = useState("");
+  const [discountStock, setDiscountStock] = useState("");
 
   // Weekly Special Product States
   const [weeklySpecialProductName, setWeeklySpecialProductName] = useState("");
@@ -70,6 +71,7 @@ const Admin = () => {
         category: discountCategory,
         description: discountDescription,
         image: discountImage,
+        stock: discountStock,
       }),
     });
 
@@ -82,6 +84,7 @@ const Admin = () => {
       setDiscountCategory("");
       setDiscountDescription("");
       setDiscountImage("");
+      setDiscountStock("");
     } else {
       alert(data.message);
     }
@@ -225,6 +228,14 @@ const Admin = () => {
               required
               style={styles.input}
             />
+            <input
+              type="text"
+              placeholder="Stock"
+              value={discountStock}
+              onChange={(e) => setDiscountStock(e.target.value)}
+              required
+              style={styles.input}
+              />
             <button type="submit" style={styles.button}>
               Add Discount Product
             </button>

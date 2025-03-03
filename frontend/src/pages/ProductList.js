@@ -23,9 +23,13 @@ const ProductList = () => {
     }
   };
 
+  const handleBuyNow = (product) => {
+    navigate("/paymentss", { state: { product } });
+  };
+
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Products</h2>
+      <h2 style={styles.title}>Tech Gadgets Store</h2>
       <div style={styles.productList}>
         {products.length > 0 ? (
           products.map((product) => (
@@ -35,20 +39,17 @@ const ProductList = () => {
                 alt={product.productName}
                 style={styles.productImage}
               />
-              <h3>{product.productName}</h3>
-              <p>Price: ₹{product.price}</p>
-              <p>Category: {product.category}</p>
-              <p>{product.description}</p>
-              <button
-                style={styles.button}
-                onClick={() => navigate("/payment")}
-              >
+              <h3 style={styles.productName}>{product.productName}</h3>
+              <div style={styles.categoryBadge}>{product.category}</div>
+              <p style={styles.description}>{product.description}</p>
+              <p style={styles.price}>₹{product.price}</p>
+              <button style={styles.button} onClick={() => handleBuyNow(product)}>
                 Buy Now
               </button>
             </div>
           ))
         ) : (
-          <p>No products available</p>
+          <p style={styles.noProducts}>No products available</p>
         )}
       </div>
     </div>
@@ -57,46 +58,93 @@ const ProductList = () => {
 
 const styles = {
   container: {
-    padding: "20px",
-    textAlign: "center",
-    backgroundColor: "#f4f4f4",
+    padding: "40px",
+    backgroundColor: "#f9f9f9",
+    minHeight: "100vh",
+    fontFamily: "'Poppins', sans-serif",
   },
   title: {
-    fontSize: "28px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-    color: "#333",
+    fontSize: "40px",
+    textAlign: "center",
+    marginBottom: "40px",
+    color: "#2c3e50",
+    textTransform: "uppercase",
+    letterSpacing: "3px",
+    background: "linear-gradient(to right, #007BFF, #00BFFF)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   },
   productList: {
-    display: "flex",
-    flexWrap: "wrap",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "30px",
     justifyContent: "center",
-    gap: "20px",
+    padding: "20px",
   },
   productCard: {
-    width: "300px",
-    padding: "15px",
+    padding: "20px",
+    borderRadius: "12px",
     backgroundColor: "white",
-    borderRadius: "10px",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 6px 15px rgba(0, 0, 0, 0.15)",
     textAlign: "center",
-    transition: "0.3s",
+    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+    cursor: "pointer",
+  },
+  productCardHover: {
+    transform: "translateY(-10px)",
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.25)",
   },
   productImage: {
     width: "100%",
     height: "300px",
     objectFit: "cover",
     borderRadius: "10px",
+    marginBottom: "20px",
+  },
+  productName: {
+    fontSize: "24px",
+    fontWeight: "bold",
     marginBottom: "10px",
+    color: "#333",
+  },
+  description: {
+    fontSize: "14px",
+    color: "#777",
+    marginBottom: "20px",
+  },
+  price: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#007BFF",
+    marginBottom: "20px",
+  },
+  categoryBadge: {
+    display: "inline-block",
+    padding: "5px 15px",
+    backgroundColor: "#007BFF",
+    color: "white",
+    borderRadius: "20px",
+    fontSize: "14px",
+    marginBottom: "15px",
   },
   button: {
     padding: "10px 20px",
     backgroundColor: "#007BFF",
     color: "white",
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "10px",
     cursor: "pointer",
     fontSize: "16px",
+    transition: "background 0.3s ease, transform 0.3s ease",
+  },
+  buttonHover: {
+    backgroundColor: "#0056b3",
+    transform: "scale(1.05)",
+  },
+  noProducts: {
+    textAlign: "center",
+    fontSize: "20px",
+    color: "#777",
   },
 };
 

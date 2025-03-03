@@ -7,7 +7,9 @@ import Admin from './pages/Admin';
 import ProductList from './pages/ProductList';
 import DiscountProducts from './pages/DiscountProducts';
 import WeeklySpecial from './pages/WeeklySpecial';
-import Payment from './pages/Payment';
+import Payment from './pages/Payment'; 
+import Payments from './pages/payments';
+import Paymentss from './pages/paymentss';
 
 const App = () => {
 
@@ -20,7 +22,9 @@ const App = () => {
         <Route path='/home' element={<Home />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/productlist' element={<ProductList />} />
+        <Route path='/paymentss' element={<Paymentss />} />
         <Route path='/discountproducts' element={<DiscountProducts />} />
+        <Route path='/payments' element={<Payments />} />
         <Route path='/weeklyspecial' element={<WeeklySpecial />} />
         <Route path='/payment' element={<Payment />} />
       </Routes>

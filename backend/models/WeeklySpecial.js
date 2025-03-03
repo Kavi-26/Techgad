@@ -29,10 +29,6 @@ const WeeklySpecialSchema = new mongoose.Schema({
     type: Number, // Time in Hours
     required: true,
   },
-  // createdAt: {
-  //   type: Date,
-  //   default: Date.now,
-  // },
 });
 
 module.exports = mongoose.model("WeeklySpecial", WeeklySpecialSchema);

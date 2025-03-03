@@ -2,49 +2,66 @@ const express = require("express");
 const router = express.Router();
 const WeeklySpecial = require("../models/WeeklySpecial");
 
-// Create Weekly Special
-router.post("/", async (req, res) => {
+// Add Weekly Special Product
+router.post("/add", async (req, res) => {
+  const { 
+    productName, 
+    price, 
+    category, 
+    description, 
+    image, 
+    stock, 
+    limitedTime 
+  } = req.body;
+
   try {
-    const product = await WeeklySpecial.create(req.body);
-    res.status(201).json(product);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    const newProduct = new WeeklySpecial({
+      productName,
+      price,
+      category,
+      description,
+      image,
+      stock,
+      limitedTime,
+    });
+
+    await newProduct.save();
+    res.status(201).json({ message: "Weekly Special Product Added Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to Add Weekly Special Product", error });
   }
 });
 
-// Get All Weekly Specials
+// Fetch Weekly Special Products
 router.get("/", async (req, res) => {
   try {
     const products = await WeeklySpecial.find();
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to Fetch Weekly Special Products", error });
   }
 });
 
-// Get Single Product by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await WeeklySpecial.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product Not Found" });
-    }
-    res.status(200).json(product);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// Payment Route to Reduce Stock
+router.post("/processpayment", async (req, res) => {
+  const { productId, quantity } = req.body;
 
-// Delete Product
-router.delete("/:id", async (req, res) => {
   try {
-    const product = await WeeklySpecial.findByIdAndDelete(req.params.id);
+    const product = await WeeklySpecial.findById(productId);
+
     if (!product) {
-      return res.status(404).json({ message: "Product Not Found" });
+      return res.status(404).json({ message: "Product not found" });
     }
-    res.status(200).json({ message: "Product Deleted" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+
+    if (product.stock >= quantity) {
+      product.stock -= quantity;
+      await product.save();
+      res.status(200).json({ message: "Payment Successful, Stock Updated" });
+    } else {
+      res.status(400).json({ message: "Insufficient stock" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
   }
 });
 
