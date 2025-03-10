@@ -8,7 +8,7 @@ const DiscountProducts = () => {
   useEffect(() => {
     fetchDiscountProducts();
   }, []);
-
+ 
   const fetchDiscountProducts = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/discountproducts");
@@ -30,6 +30,7 @@ const DiscountProducts = () => {
   const handlePayment = (product) => {
     navigate("/payments", { state: { product } });
   };
+  
 
   return (
     <div style={styles.container}>

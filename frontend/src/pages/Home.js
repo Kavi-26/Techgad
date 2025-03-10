@@ -14,33 +14,19 @@ const Home = () => {
       <header style={headerStyle}>
         <div style={logoStyle}>Tech Gadgets Store</div>
         <nav style={navStyle}>
-          <a href="/productlist" style={linkStyle}>
-            ProductList
-          </a>
-          <a href="/admin" style={linkStyle}>
-            Admin
-          </a>
-          <a href="/profile" style={linkStyle}>
-            Profile
-          </a>
-          <a href="/login" style={linkStyle}>
-            Login
-          </a>
-          <a href="/register" style={linkStyle}>
-            Register
-          </a>
-          <button onClick={handleLogout} style={logoutButtonStyle}>
-            Logout
-          </button>
+          <a href="/productlist" style={linkStyle}>ProductList</a>
+          <a href="/admin" style={linkStyle}>Admin</a>
+          <a href="/profile" style={linkStyle}>Profile</a>
+          <a href="/login" style={linkStyle}>Login</a>
+          <a href="/register" style={linkStyle}>Register</a>
+          <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
         </nav>
       </header>
 
       {/* Main Content */}
       <main style={mainContentStyle}>
         <h1 style={mainTitleStyle}>Welcome to Tech Gadgets Store</h1>
-        <p style={subTitleStyle}>
-          Your one-stop solution for the latest tech gadgets!
-        </p>
+        <p style={subTitleStyle}>Your one-stop solution for the latest tech gadgets!</p>
 
         {/* Discount Products Section */}
         <section style={sectionStyle}>
@@ -55,9 +41,36 @@ const Home = () => {
 
       {/* Footer Section */}
       <footer style={footerStyle}>
-        <p style={footerTextStyle}>
-          © 2025 Tech Gadgets Store. All Rights Reserved.
-        </p>
+        <div style={footerContentStyle}>
+          {/* Contact Info */}
+          <div style={footerSectionStyle}>
+            <h3 style={footerTitleStyle}>Contact Us</h3>
+            <p>📍 123 Tech Street, Silicon Valley, CA</p>
+            <p>📞 +1 234 567 890</p>
+            <p>✉ support@techgadgets.com</p>
+          </div>
+
+          {/* Follow Us */}
+          <div style={footerSectionStyle}>
+            <h3 style={footerTitleStyle}>Follow Us</h3>
+            <div style={socialIconsStyle}>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>📘 Facebook</a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>🐦 Twitter</a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>📸 Instagram</a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div style={footerSectionStyle}>
+            <h3 style={footerTitleStyle}>Quick Links</h3>
+            <a href="/about" style={quickLinkStyle}>About Us</a>
+            <a href="/terms" style={quickLinkStyle}>Terms & Conditions</a>
+            <a href="/privacy" style={quickLinkStyle}>Privacy Policy</a>
+          </div>
+        </div>
+
+        {/* Copyright */}
+        <p style={footerTextStyle}>© 2025 Tech Gadgets Store. All Rights Reserved.</p>
       </footer>
     </div>
   );
@@ -65,7 +78,7 @@ const Home = () => {
 
 const containerStyle = {
   fontFamily: "'Arial', sans-serif",
-  background: "linear-gradient(135deg, #f8f9fa, #e9ecef)",
+  background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
   minHeight: "100vh",
 };
 
@@ -130,14 +143,59 @@ const sectionStyle = {
 };
 
 const footerStyle = {
-  padding: "20px 50px",
+  padding: "30px 50px",
   background: "#343a40",
   color: "#f8f9fa",
   textAlign: "center",
 };
 
+const footerContentStyle = {
+  display: "flex",
+  justifyContent: "space-between",
+  flexWrap: "wrap",
+  maxWidth: "1000px",
+  margin: "0 auto",
+  paddingBottom: "20px",
+  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+};
+
+const footerSectionStyle = {
+  flex: "1",
+  minWidth: "250px",
+  marginBottom: "20px",
+};
+
+const footerTitleStyle = {
+  fontSize: "18px",
+  fontWeight: "bold",
+  marginBottom: "10px",
+  color: "#f8f9fa",
+};
+
+const socialIconsStyle = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "5px",
+};
+
+const iconStyle = {
+  textDecoration: "none",
+  color: "#f8f9fa",
+  fontSize: "16px",
+  transition: "color 0.3s ease",
+};
+
+const quickLinkStyle = {
+  display: "block",
+  textDecoration: "none",
+  color: "#f8f9fa",
+  fontSize: "16px",
+  marginBottom: "5px",
+  transition: "color 0.3s ease",
+};
+
 const footerTextStyle = {
-  margin: 0,
+  marginTop: "20px",
   fontSize: "14px",
 };
 

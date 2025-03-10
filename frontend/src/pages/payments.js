@@ -1,110 +1,171 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const Payments = () => {
+const Paymentss = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const product = location.state?.product;
+  const product = location.state?.product || {};
 
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("card");
-  const [userDetails, setUserDetails] = useState({ name: "", mobile: "", address: "" });
-  const [cardDetails, setCardDetails] = useState({ cardNumber: "", expiry: "", cvv: "" });
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiry, setExpiry] = useState("");
+  const [cvv, setCvv] = useState("");
   const [upiId, setUpiId] = useState("");
 
-  if (!product) {
-    return <h2 style={styles.error}>No Product Selected for Payment</h2>;
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const calculateDiscountPrice = (originalPrice, discountPercentage) => {
-    return (originalPrice - (originalPrice * discountPercentage) / 100).toFixed(2);
-  };
-
-  const handlePayment = async () => {
-    if (!userDetails.name || !userDetails.mobile || !userDetails.address) {
-      alert("Please fill all details");
+    if (!name || !mobile || !address) {
+      alert("Please fill all personal details");
       return;
     }
-    try {
-      const response = await fetch("http://localhost:5000/api/discountproducts/processpayment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product._id,
-          paymentMethod,
-          userDetails,
-          ...(paymentMethod === "card" ? { cardDetails } : { upiId }),
-        }),
-      });
 
-      const data = await response.json();
-      if (response.ok) {
-        alert("Payment Successful!");
-        navigate("/discountproducts");
-      } else {
-        alert(data.message || "Payment Failed");
+    if (paymentMethod === "card") {
+      if (!cardNumber || !expiry || !cvv) {
+        alert("Please fill all card details");
+        return;
       }
-    } catch (error) {
-      console.error("Payment Error:", error);
-      alert("Payment Error");
     }
-  };
 
-  const handleUserChange = (e) => setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
-  const handleCardChange = (e) => setCardDetails({ ...cardDetails, [e.target.name]: e.target.value });
+    if (paymentMethod === "google_upi" && !upiId) {
+      alert("Please enter UPI ID");
+      return;
+    }
+
+    alert(`Payment Successful using ${paymentMethod.toUpperCase()}`);
+    navigate("/home");
+  };
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Payment Page</h2>
       <div style={styles.card}>
-        <img src={product.image} alt={product.productName} style={styles.image} />
-        <h3 style={styles.productName}>{product.productName}</h3>
-        <p style={styles.originalPrice}>Original Price: <span style={styles.strikeThrough}>₹{product.originalPrice}</span></p>
-        <p style={styles.discountedPrice}>Discounted Price: ₹{calculateDiscountPrice(product.originalPrice, product.discountPercentage)}</p>
+        <h2 style={styles.title}>Secure Payment</h2>
 
-        <div style={styles.formGroup}>
-          <input type="text" name="name" placeholder="Name" value={userDetails.name} onChange={handleUserChange} />
-          <input type="text" name="mobile" placeholder="Mobile Number" maxLength="10" value={userDetails.mobile} onChange={handleUserChange} />
-          <textarea name="address" placeholder="Address" value={userDetails.address} onChange={handleUserChange} />
+        <div style={styles.productInfo}>
+          <img src={product.image} alt={product.productName} style={styles.productImage} />
+          <h3 style={styles.productName}>{product.productName}</h3>
+          <p style={styles.price}>Price: ₹{product.originalPrice - (product.originalPrice * product.discountPercentage) / 100}</p>
         </div>
 
-        <div style={styles.paymentOptions}>
-          {["card", "upi", "qr"].map((method) => (
-            <button
-              key={method}
-              onClick={() => setPaymentMethod(method)}
-              style={{
-                ...styles.paymentMethod,
-                backgroundColor: paymentMethod === method ? "#007BFF" : "#f0f4f8",
-                color: paymentMethod === method ? "white" : "#333",
-              }}
-            >
-              {method === "card" ? "Card Payment" : method === "upi" ? "Google Pay UPI" : "Google Pay QR"}
-            </button>
-          ))}
-        </div>
+        <form onSubmit={handleSubmit} style={styles.form}>
+          <h3 style={styles.subTitle}>Personal Details</h3>
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            style={styles.input}
+          />
+          <input
+            type="text"
+            placeholder="Mobile Number"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            required
+            style={styles.input}
+          />
+          <textarea
+            placeholder="Shipping Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+            style={styles.textarea}
+          />
 
-        {paymentMethod === "card" && (
-          <div style={styles.cardForm}>
-            <input type="text" name="cardNumber" placeholder="Card Number" maxLength="16" onChange={handleCardChange} />
-            <input type="text" name="expiry" placeholder="Expiry (MM/YY)" maxLength="5" onChange={handleCardChange} />
-            <input type="password" name="cvv" placeholder="CVV" maxLength="3" onChange={handleCardChange} />
+          <h3 style={styles.subTitle}>Payment Method</h3>
+          <div style={styles.paymentOptions}>
+            <label style={styles.radioLabel}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="card"
+                checked={paymentMethod === "card"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />{" "}
+              Card
+            </label>
+            <label style={styles.radioLabel}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="google_upi"
+                checked={paymentMethod === "google_upi"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />{" "}
+              Google Pay (UPI)
+            </label>
+            <label style={styles.radioLabel}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="gpay_qr"
+                checked={paymentMethod === "gpay_qr"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />{" "}
+              GPay QR Code
+            </label>
           </div>
-        )}
 
-        {paymentMethod === "upi" && (
-          <input type="text" placeholder="Enter UPI ID" value={upiId} onChange={(e) => setUpiId(e.target.value)} style={styles.input} />
-        )}
+          {paymentMethod === "card" && (
+            <div>
+              <input
+                type="text"
+                placeholder="Card Number"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(e.target.value)}
+                required
+                style={styles.input}
+              />
+              <input
+                type="text"
+                placeholder="Expiry Date (MM/YY)"
+                value={expiry}
+                onChange={(e) => setExpiry(e.target.value)}
+                required
+                style={styles.input}
+              />
+              <input
+                type="password"
+                placeholder="CVV"
+                value={cvv}
+                onChange={(e) => setCvv(e.target.value)}
+                required
+                style={styles.input}
+              />
+            </div>
+          )}
 
-        {paymentMethod === "qr" && (
-          <div>
-            <p>Scan QR Code:</p>
-            <img src="https://via.placeholder.com/200" alt="Google Pay QR Code" style={styles.qrCode} />
-          </div>
-        )}
+          {paymentMethod === "google_upi" && (
+            <input
+              type="text"
+              placeholder="Google Pay UPI ID"
+              value={upiId}
+              onChange={(e) => setUpiId(e.target.value)}
+              required
+              style={styles.input}
+            />
+          )}
 
-        <button style={styles.payButton} onClick={handlePayment}>
-          Confirm Payment
-        </button>
+          {paymentMethod === "gpay_qr" && (
+            <div style={styles.qrContainer}>
+              <p>Scan the QR Code with Google Pay</p>
+              <img 
+  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=yourupiid@upi" 
+  alt="GPay QR Code" 
+  style={styles.qrImage} 
+/>
+
+            </div>
+          )}
+
+          <button type="submit" style={styles.button}>
+            Confirm & Pay
+          </button>
+        </form>
       </div>
     </div>
   );
@@ -112,77 +173,100 @@ const Payments = () => {
 
 const styles = {
   container: {
-    textAlign: "center",
-    padding: "50px",
-    backgroundColor: "#f7f9fc",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     minHeight: "100vh",
-    fontFamily: "Arial, sans-serif",
-  },
-  title: {
-    fontSize: "36px",
-    color: "#333",
-    marginBottom: "20px",
+    background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
+    padding: "20px",
   },
   card: {
-    padding: "30px",
-    borderRadius: "20px",
-    backgroundColor: "#fff",
-    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-    display: "inline-block",
-    textAlign: "center",
-    width: "420px",
+    width: "400px",
+    padding: "20px",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    boxShadow: "0 6px 15px rgba(0, 0, 0, 0.15)",
   },
-  image: {
-    width: "200px",
-    height: "200px",
+  title: {
+    textAlign: "center",
+    marginBottom: "20px",
+    fontSize: "24px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  productInfo: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  productImage: {
+    width: "100%",
+    maxheight: "200px",
     objectFit: "cover",
     borderRadius: "10px",
-    marginBottom: "20px",
   },
-  formGroup: {
+  productName: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+  price: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    color: "#007BFF",
+  },
+  subTitle: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+    color: "#555",
+  },
+  form: {
     display: "flex",
     flexDirection: "column",
-    gap: "15px",
-    marginBottom: "20px",
+  },
+  input: {
+    padding: "10px",
+    marginBottom: "10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  },
+  textarea: {
+    padding: "10px",
+    marginBottom: "10px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+    height: "80px",
+    resize: "none",
   },
   paymentOptions: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginBottom: "20px",
   },
-  paymentMethod: {
-    padding: "10px",
+  radioLabel: {
+    fontSize: "16px",
+    color: "#333",
+  },
+  qrContainer: {
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  qrImage: {
+    width: "150px",
+    height: "150px",
+    display: "block",
+    margin: "0 auto",
+  },
+  button: {
+    padding: "12px",
+    borderRadius: "5px",
     border: "none",
-    borderRadius: "10px",
-    cursor: "pointer",
-    transition: "background 0.3s ease",
-  },
-  cardForm: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    marginBottom: "20px",
-  },
-  qrCode: {
-    width: "200px",
-    marginBottom: "20px",
-  },
-  payButton: {
-    padding: "12px 25px",
     backgroundColor: "#007BFF",
     color: "white",
-    border: "none",
-    borderRadius: "10px",
+    fontSize: "18px",
     cursor: "pointer",
-    transition: "background 0.3s",
-  },
-  payButtonHover: {
-    backgroundColor: "#0056b3",
-  },
-  error: {
-    color: "#ff4d4d",
-    marginTop: "50px",
+    transition: "background-color 0.3s ease",
   },
 };
 
-export default Payments;
+export default Paymentss;

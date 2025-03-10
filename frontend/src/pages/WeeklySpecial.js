@@ -23,7 +23,6 @@ const WeeklySpecial = () => {
     }
   };
 
-  
   const handlePayment = (product) => {
     navigate("/payment", { state: { product } });
   };

@@ -48,7 +48,7 @@ const Payment = () => {
 
       if (response.ok) {
         alert("Payment Successful!");
-        navigate("/weeklyspecial");
+        navigate("/home");
       } else {
         alert(data.message || "Payment Failed");
       }
@@ -135,7 +135,7 @@ const styles = {
   container: {
     textAlign: "center",
     padding: "50px",
-    backgroundColor: "#f7f9fc",
+    background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
     minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
@@ -155,7 +155,7 @@ const styles = {
   },
   image: {
     width: "100%",
-    height: "250px",
+    maxheight: "250px",
     objectFit: "cover",
     borderRadius: "10px",
     marginBottom: "20px",
