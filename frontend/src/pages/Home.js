@@ -15,7 +15,7 @@ const Home = () => {
         <div style={logoStyle}>Tech Gadgets Store</div>
         <nav style={navStyle}>
           <a href="/productlist" style={linkStyle}>ProductList</a>
-          <a href="/admin" style={linkStyle}>Admin</a>
+          {/* <a href="/admin" style={linkStyle}>Admin</a> */}
           <a href="/profile" style={linkStyle}>Profile</a>
           <a href="/login" style={linkStyle}>Login</a>
           <a href="/register" style={linkStyle}>Register</a>

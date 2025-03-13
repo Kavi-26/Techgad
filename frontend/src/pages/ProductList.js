@@ -59,7 +59,7 @@ const ProductList = () => {
 const styles = {
   container: {
     padding: "40px",
-    backgroundColor: "#f9f9f9",
+    background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
     minHeight: "100vh",
     fontFamily: "'Poppins', sans-serif",
   },
@@ -67,7 +67,7 @@ const styles = {
     fontSize: "40px",
     textAlign: "center",
     marginBottom: "40px",
-    color: "#2c3e50",
+    color: "blue",
     textTransform: "uppercase",
     letterSpacing: "3px",
     background: "linear-gradient(to right, #007BFF, #00BFFF)",

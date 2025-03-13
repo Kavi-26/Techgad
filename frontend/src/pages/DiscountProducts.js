@@ -87,7 +87,7 @@ const styles = {
   container: {
     padding: "30px",
     textAlign: "center",
-    background: "#f0f4f8",
+    background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
     minHeight: "100vh",
     fontFamily: "Arial, sans-serif",
   },
