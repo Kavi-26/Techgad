@@ -3,200 +3,212 @@ import DiscountProducts from "./DiscountProducts";
 import WeeklySpecial from "./WeeklySpecial";
 
 const Home = () => {
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   window.location.href = "/login";
+  // };
 
   return (
-    <div style={containerStyle}>
-      {/* Header Section */}
-      <header style={headerStyle}>
-        <div style={logoStyle}>Tech Gadgets Store</div>
-        <nav style={navStyle}>
-          <a href="/productlist" style={linkStyle}>ProductList</a>
-          {/* <a href="/admin" style={linkStyle}>Admin</a> */}
-          <a href="/profile" style={linkStyle}>Profile</a>
-          <a href="/login" style={linkStyle}>Login</a>
-          <a href="/register" style={linkStyle}>Register</a>
-          <button onClick={handleLogout} style={logoutButtonStyle}>Logout</button>
-        </nav>
-      </header>
+    <div style={styles.container}>
+      {/* Video Background */}
+      <video autoPlay loop muted style={styles.videoBackground}>
+        <source src="/assets/login-bg.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      {/* Main Content */}
-      <main style={mainContentStyle}>
-        <h1 style={mainTitleStyle}>Welcome to Tech Gadgets Store</h1>
-        <p style={subTitleStyle}>Your one-stop solution for the latest tech gadgets!</p>
+      {/* Overlay for Readability */}
+      <div style={styles.overlay}>
+        {/* Header Section */}
+        <header style={styles.header}>
+          <div style={styles.logo}>Tech Gadgets Store</div>
+          <nav style={styles.nav}>
+            <a href="/productlist" style={styles.link}>Product List</a>
+            <a href="/profile" style={styles.link}>Profile</a>
+            <a href="/login" style={styles.link}>Login</a>
+            <a href="/register" style={styles.link}>Register</a>
+            {/* <button onClick={handleLogout} style={styles.logoutButton}>Logout</button> */}
+          </nav>
+        </header>
 
-        {/* Discount Products Section */}
-        <section style={sectionStyle}>
-          <DiscountProducts />
-        </section>
+        {/* Main Content */}
+        <main style={styles.mainContent}>
+          <h1 style={styles.mainTitle}>Welcome to Tech Gadgets Store</h1>
+          <p style={styles.subTitle}>Your one-stop solution for the latest tech gadgets!</p>
 
-        {/* Weekly Special Section */}
-        <section style={sectionStyle}>
-          <WeeklySpecial />
-        </section>
-      </main>
+          {/* Discount Products Section */}
+          <section style={styles.section}>
+            <DiscountProducts />
+          </section>
 
-      {/* Footer Section */}
-      <footer style={footerStyle}>
-        <div style={footerContentStyle}>
-          {/* Contact Info */}
-          <div style={footerSectionStyle}>
-            <h3 style={footerTitleStyle}>Contact Us</h3>
-            <p>📍 123 Tech Street, Silicon Valley, CA</p>
-            <p>📞 +1 234 567 890</p>
-            <p>✉ support@techgadgets.com</p>
-          </div>
+          {/* Weekly Special Section */}
+          <section style={styles.section}>
+            <WeeklySpecial />
+          </section>
+        </main>
 
-          {/* Follow Us */}
-          <div style={footerSectionStyle}>
-            <h3 style={footerTitleStyle}>Follow Us</h3>
-            <div style={socialIconsStyle}>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>📘 Facebook</a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>🐦 Twitter</a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={iconStyle}>📸 Instagram</a>
+        {/* Footer Section */}
+        <footer style={styles.footer}>
+          <div style={styles.footerContent}>
+            {/* Contact Info */}
+            <div style={styles.footerSection}>
+              <h3 style={styles.footerTitle}>Contact Us</h3>
+              <p>📍 123 Tech Street, Silicon Valley, CA</p>
+              <p>📞 +1 234 567 890</p>
+              <p>✉ support@techgadgets.com</p>
+            </div>
+
+            {/* Follow Us */}
+            <div style={styles.footerSection}>
+              <h3 style={styles.footerTitle}>Follow Us</h3>
+              <div style={styles.socialIcons}>
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={styles.icon}>📘 Facebook</a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={styles.icon}>🐦 Twitter</a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={styles.icon}>📸 Instagram</a>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div style={styles.footerSection}>
+              <h3 style={styles.footerTitle}>Quick Links</h3>
+              <a href="/about" style={styles.quickLink}>About Us</a>
+              <a href="/terms" style={styles.quickLink}>Terms & Conditions</a>
+              <a href="/privacy" style={styles.quickLink}>Privacy Policy</a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div style={footerSectionStyle}>
-            <h3 style={footerTitleStyle}>Quick Links</h3>
-            <a href="/about" style={quickLinkStyle}>About Us</a>
-            <a href="/terms" style={quickLinkStyle}>Terms & Conditions</a>
-            <a href="/privacy" style={quickLinkStyle}>Privacy Policy</a>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <p style={footerTextStyle}>© 2025 Tech Gadgets Store. All Rights Reserved.</p>
-      </footer>
+          {/* Copyright */}
+          <p style={styles.footerText}>© 2025 Tech Gadgets Store. All Rights Reserved.</p>
+        </footer>
+      </div>
     </div>
   );
 };
 
-const containerStyle = {
-  fontFamily: "'Arial', sans-serif",
-  background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
-  minHeight: "100vh",
-};
-
-const headerStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "20px 50px",
-  background: "#343a40",
-  color: "#fff",
-  boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
-};
-
-const logoStyle = {
-  fontSize: "26px",
-  fontWeight: "bold",
-};
-
-const navStyle = {
-  display: "flex",
-  alignItems: "center",
-};
-
-const linkStyle = {
-  margin: "0 15px",
-  textDecoration: "none",
-  color: "#f8f9fa",
-  fontSize: "16px",
-  transition: "color 0.3s ease",
-};
-
-const logoutButtonStyle = {
-  padding: "10px 15px",
-  backgroundColor: "#dc3545",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  fontSize: "16px",
-  transition: "background-color 0.3s ease",
-};
-
-const mainContentStyle = {
-  padding: "50px",
-  textAlign: "center",
-};
-
-const mainTitleStyle = {
-  fontSize: "36px",
-  color: "#212529",
-  marginBottom: "10px",
-};
-
-const subTitleStyle = {
-  fontSize: "20px",
-  color: "#495057",
-  marginBottom: "40px",
-};
-
-const sectionStyle = {
-  marginBottom: "50px",
-};
-
-const footerStyle = {
-  padding: "30px 50px",
-  background: "#343a40",
-  color: "#f8f9fa",
-  textAlign: "center",
-};
-
-const footerContentStyle = {
-  display: "flex",
-  justifyContent: "space-between",
-  flexWrap: "wrap",
-  maxWidth: "1000px",
-  margin: "0 auto",
-  paddingBottom: "20px",
-  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-};
-
-const footerSectionStyle = {
-  flex: "1",
-  minWidth: "250px",
-  marginBottom: "20px",
-};
-
-const footerTitleStyle = {
-  fontSize: "18px",
-  fontWeight: "bold",
-  marginBottom: "10px",
-  color: "#f8f9fa",
-};
-
-const socialIconsStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "5px",
-};
-
-const iconStyle = {
-  textDecoration: "none",
-  color: "#f8f9fa",
-  fontSize: "16px",
-  transition: "color 0.3s ease",
-};
-
-const quickLinkStyle = {
-  display: "block",
-  textDecoration: "none",
-  color: "#f8f9fa",
-  fontSize: "16px",
-  marginBottom: "5px",
-  transition: "color 0.3s ease",
-};
-
-const footerTextStyle = {
-  marginTop: "20px",
-  fontSize: "14px",
+// Internal CSS Styles
+const styles = {
+  container: {
+    position: "relative",
+    minHeight: "100vh", // Allow scrolling when content overflows
+    fontFamily: "'Arial', sans-serif",
+  },
+  videoBackground: {
+    position: "fixed", // Keep video fixed in the background
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    zIndex: "-1",
+  },
+  overlay: {
+    position: "relative",
+    background: "rgba(0, 0, 0, 0.4)", // Dark overlay for readability
+    color: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    minHeight: "100vh", // Ensure content expands naturally
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "20px 50px",
+    background: "rgba(52, 58, 64, 0.8)",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.3)",
+    position: "sticky",
+    top: "0",
+    zIndex: "10",
+  },
+  logo: {
+    fontSize: "26px",
+    fontWeight: "bold",
+  },
+  nav: {
+    display: "flex",
+    alignItems: "center",
+  },
+  link: {
+    margin: "0 15px",
+    textDecoration: "none",
+    color: "#f8f9fa",
+    fontSize: "16px",
+    transition: "color 0.3s ease",
+  },
+  logoutButton: {
+    padding: "10px 15px",
+    backgroundColor: "#dc3545",
+    color: "#fff",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "16px",
+    transition: "background-color 0.3s ease",
+  },
+  mainContent: {
+    padding: "50px",
+    textAlign: "center",
+  },
+  mainTitle: {
+    fontSize: "36px",
+    color: "#fff",
+    marginBottom: "10px",
+  },
+  subTitle: {
+    fontSize: "20px",
+    color: "#f8f9fa",
+    marginBottom: "40px",
+  },
+  section: {
+    marginBottom: "50px",
+  },
+  footer: {
+    padding: "30px 50px",
+    background: "rgba(52, 58, 64, 0.8)",
+    textAlign: "center",
+  },
+  footerContent: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    maxWidth: "1000px",
+    margin: "0 auto",
+    paddingBottom: "20px",
+    borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+  },
+  footerSection: {
+    flex: "1",
+    minWidth: "250px",
+    marginBottom: "20px",
+  },
+  footerTitle: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+  },
+  socialIcons: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "5px",
+  },
+  icon: {
+    textDecoration: "none",
+    color: "#f8f9fa",
+    fontSize: "16px",
+    transition: "color 0.3s ease",
+  },
+  quickLink: {
+    display: "block",
+    textDecoration: "none",
+    color: "#f8f9fa",
+    fontSize: "16px",
+    marginBottom: "5px",
+    transition: "color 0.3s ease",
+  },
+  footerText: {
+    marginTop: "20px",
+    fontSize: "14px",
+  },
 };
 
 export default Home;

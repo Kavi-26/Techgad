@@ -26,35 +26,44 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2 style={styles.title}>Login</h2>
-        <form onSubmit={handleLogin} style={styles.form}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <button type="submit" style={styles.button}>
-            Login
-          </button>
-        </form>
-        <p style={styles.loginText}>
-          Don't have an account?{" "}
-          <a href="/register" style={styles.link}>
-            Register
-          </a>
-        </p>
+      {/* Background Video */}
+      <video autoPlay loop muted style={styles.videoBackground}>
+        <source src="/assets/login-bg.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Login Form */}
+      <div style={styles.overlay}>
+        <div style={styles.formContainer}>
+          <h2 style={styles.title}>Login</h2>
+          <form onSubmit={handleLogin} style={styles.form}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={styles.input}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={styles.input}
+            />
+            <button type="submit" style={styles.button}>
+              Login
+            </button>
+          </form>
+          <p style={styles.loginText}>
+            Don't have an account?{" "}
+            <a href="/register" style={styles.link}>
+              Register
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -63,54 +72,84 @@ const Login = () => {
 // Internal CSS Styles
 const styles = {
   container: {
+    position: "relative",
+    width: "100vw",
+    height: "100vh",
+    overflow: "hidden",
+  },
+  videoBackground: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    zIndex: "-1",
+  },
+  overlay: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4",
+    backdropFilter: "blur(6px)", // Blur effect for readability
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Slight overlay for contrast
   },
   formContainer: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "10px",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    backgroundColor: "rgba(255, 255, 255, 0.1)", // Semi-transparent form
+    padding: "30px",
+    borderRadius: "12px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
     textAlign: "center",
-    width: "320px",
+    width: "340px",
+    backdropFilter: "blur(15px)", // Glassmorphism effect
+    border: "1px solid rgba(255, 255, 255, 0.2)",
   },
   title: {
-    marginBottom: "10px",
-    fontSize: "24px",
+    marginBottom: "15px",
+    fontSize: "26px",
     fontWeight: "bold",
-    color: "#333",
+    color: "#fff",
   },
   form: {
     display: "flex",
     flexDirection: "column",
   },
   input: {
-    padding: "10px",
+    padding: "12px",
     marginBottom: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
+    borderRadius: "8px",
+    border: "none",
+    backgroundColor: "rgba(255, 255, 255, 0.2)", // Transparent input fields
+    color: "#fff",
+    fontSize: "16px",
+    outline: "none",
   },
   button: {
-    padding: "10px",
-    borderRadius: "5px",
+    padding: "12px",
+    borderRadius: "8px",
     border: "none",
     backgroundColor: "#007BFF",
     color: "white",
-    fontSize: "16px",
+    fontSize: "18px",
     cursor: "pointer",
     transition: "0.3s",
   },
+  buttonHover: {
+    backgroundColor: "#0056b3",
+  },
   loginText: {
-    marginTop: "10px",
+    marginTop: "12px",
     fontSize: "14px",
-    color: "#333",
+    color: "#fff",
   },
   link: {
-    color: "#007BFF",
+    color: "#00BFFF",
     textDecoration: "none",
+    fontWeight: "bold",
   },
 };
 

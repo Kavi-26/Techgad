@@ -1,71 +1,111 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
 
 const WeeklySpecial = () => {
   const [weeklySpecials, setWeeklySpecials] = useState([]);
+  const [timers, setTimers] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchWeeklySpecials();
-  }, []);
-  
-  const fetchWeeklySpecials = async () => {
+  // Fetch weekly specials
+  const fetchWeeklySpecials = useCallback(async () => {
     try {
       const response = await fetch("http://localhost:5000/api/weeklyspecial");
       const data = await response.json();
       if (response.ok) {
         setWeeklySpecials(data);
+        initializeTimers(data);
       } else {
         alert("Failed to fetch weekly special products");
       }
     } catch (error) {
       console.error("Error fetching weekly special products:", error);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchWeeklySpecials();
+  }, [fetchWeeklySpecials]);
+
+  // Initialize countdown timers
+  const initializeTimers = (products) => {
+    const newTimers = {};
+    products.forEach((product) => {
+      if (product.limitedTime > 0) {
+        const endTime = Date.now() + product.limitedTime * 60 * 60 * 1000; // Convert hours to milliseconds
+        newTimers[product._id] = endTime;
+      }
+    });
+    setTimers(newTimers);
+  };
+
+  // Update the countdown every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimers((prevTimers) => {
+        const updatedTimers = { ...prevTimers };
+        Object.keys(updatedTimers).forEach((id) => {
+          const timeLeft = updatedTimers[id] - Date.now();
+          if (timeLeft <= 0) {
+            delete updatedTimers[id]; // Remove expired timers
+          }
+        });
+        return updatedTimers;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  // Format time in HH:MM:SS
+  const formatTime = (endTime) => {
+    const timeLeft = endTime - Date.now();
+    if (timeLeft <= 0) return "00:00:00";
+
+    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
 
   const handlePayment = (product) => {
     navigate("/payment", { state: { product } });
   };
-  
+
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>🔥 Weekly Special Products</h2>
       <div style={styles.productList}>
         {weeklySpecials.length > 0 ? (
-          weeklySpecials.map((product) => (
-            <div key={product._id} style={styles.productCard}>
-              <div style={styles.imageContainer}>
-                <img
-                  src={product.image}
-                  alt={product.productName}
-                  style={styles.productImage}
-                />
-                {product.limitedTime && (
-                  <span style={styles.limitedTimeTag}>
-                    ⏰ {product.limitedTime} Hours Left
-                  </span>
+          weeklySpecials.map((product) => {
+            const timer = timers[product._id];
+            const isExpired = !timer || timer <= Date.now();
+
+            return (
+              <div key={product._id} style={styles.productCard}>
+                <div style={styles.imageContainer}>
+                  <img src={product.image} alt={product.productName} style={styles.productImage} />
+                  {timer && !isExpired && (
+                    <span style={styles.limitedTimeTag}>⏳ {formatTime(timer)} Left</span>
+                  )}
+                </div>
+                <h3 style={styles.productName}>{product.productName}</h3>
+                <p style={styles.price}>Price: ₹{product.price}</p>
+                <ul style={styles.description}>
+                  {product.description.split(",").map((point, index) => (
+                    <li key={index}>{point.trim()}</li>
+                  ))}
+                </ul>
+                {product.stock > 0 && !isExpired ? (
+                  <button style={styles.paymentButton} onClick={() => handlePayment(product)}>
+                    Buy Now
+                  </button>
+                ) : (
+                  <p style={styles.outOfStock}>{isExpired ? "Offer Expired" : "Out of Stock"}</p>
                 )}
               </div>
-              <h3 style={styles.productName}>{product.productName}</h3>
-              <p style={styles.price}>Price: ₹{product.price}</p>
-              <ul style={styles.description}>
-                {product.description.split(",").map((point, index) => (
-                  <li key={index}>{point.trim()}</li>
-                ))}
-              </ul>
-              {/* <p style={styles.stock}>Stock: {product.stock}</p> */}
-              {product.stock > 0 ? (
-                <button
-                  style={styles.paymentButton}
-                  onClick={() => handlePayment(product)}
-                >
-                  Buy Now
-                </button>
-              ) : (
-                <p style={styles.outOfStock}>Out of Stock</p>
-              )}
-            </div>
-          ))
+            );
+          })
         ) : (
           <p style={styles.noProducts}>No Weekly Special Products Available</p>
         )}
@@ -74,6 +114,7 @@ const WeeklySpecial = () => {
   );
 };
 
+// Updated Styles
 const styles = {
   container: {
     padding: "30px",
@@ -148,11 +189,6 @@ const styles = {
     color: "#555",
     listStyleType: "disc",
     marginBottom: "20px",
-  },
-  stock: {
-    fontSize: "16px",
-    color: "#555",
-    marginBottom: "10px",
   },
   paymentButton: {
     padding: "10px 20px",

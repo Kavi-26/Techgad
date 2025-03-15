@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,12 +28,31 @@ const ProductList = () => {
     navigate("/paymentss", { state: { product } });
   };
 
+  // Filter products based on search input
+  const filteredProducts = products.filter((product) =>
+    product.productName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Tech Gadgets Store</h2>
+
+      {/* Search Bar */}
+      <div style={styles.searchContainer}>
+        <input
+          type="text"
+          placeholder="Search for products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={styles.searchInput}
+        />
+        <button style={styles.searchButton}>Search</button>
+      </div>
+
+      {/* Product List */}
       <div style={styles.productList}>
-        {products.length > 0 ? (
-          products.map((product) => (
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
             <div key={product._id} style={styles.productCard}>
               <img
                 src={product.image}
@@ -49,7 +69,7 @@ const ProductList = () => {
             </div>
           ))
         ) : (
-          <p style={styles.noProducts}>No products available</p>
+          <p style={styles.noProducts}>No products found</p>
         )}
       </div>
     </div>
@@ -59,7 +79,7 @@ const ProductList = () => {
 const styles = {
   container: {
     padding: "40px",
-    background: "linear-gradient(to right,rgb(230, 233, 236), #00BFFF)",
+    background: "linear-gradient(to right, rgb(230, 233, 236), #00BFFF)",
     minHeight: "100vh",
     fontFamily: "'Poppins', sans-serif",
   },
@@ -73,6 +93,30 @@ const styles = {
     background: "linear-gradient(to right, #007BFF, #00BFFF)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
+  },
+  searchContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "30px",
+  },
+  searchInput: {
+    width: "300px",
+    padding: "10px",
+    border: "2px solid #007BFF",
+    borderRadius: "5px",
+    fontSize: "16px",
+    outline: "none",
+  },
+  searchButton: {
+    marginLeft: "10px",
+    padding: "10px 20px",
+    backgroundColor: "#007BFF",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "16px",
+    transition: "background 0.3s ease",
   },
   productList: {
     display: "grid",
@@ -89,10 +133,6 @@ const styles = {
     textAlign: "center",
     transition: "transform 0.3s ease, box-shadow 0.3s ease",
     cursor: "pointer",
-  },
-  productCardHover: {
-    transform: "translateY(-10px)",
-    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.25)",
   },
   productImage: {
     width: "100%",
@@ -136,10 +176,6 @@ const styles = {
     cursor: "pointer",
     fontSize: "16px",
     transition: "background 0.3s ease, transform 0.3s ease",
-  },
-  buttonHover: {
-    backgroundColor: "#0056b3",
-    transform: "scale(1.05)",
   },
   noProducts: {
     textAlign: "center",

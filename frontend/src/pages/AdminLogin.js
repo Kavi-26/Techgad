@@ -9,7 +9,7 @@ const AdminLogin = () => {
 
   // Hardcoded Admin Credentials
   const adminEmail = "admin@techgadgets.com";
-  const adminPassword = "Admin@123"; // Change this as needed
+  const adminPassword = "admin123"; // Change this as needed
 
   const handleLogin = (e) => {
     e.preventDefault();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
 
 const Paymentss = () => {
   const location = useLocation();
@@ -14,6 +15,54 @@ const Paymentss = () => {
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [upiId, setUpiId] = useState("");
+
+  // Generate a random Transaction ID
+  const generateTransactionId = () => {
+    return "TXN" + Math.floor(1000000000 + Math.random() * 9000000000);
+  };
+
+  // Generate Receipt PDF
+  const generateReceipt = () => {
+    const transactionId = generateTransactionId();
+    const websiteName = "TechGadgets Store";
+    const contactInfo = "Customer Support: +91-9876543210 | Email: support@techgadgets.com";
+
+    const doc = new jsPDF();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text(`${websiteName}`, 70, 15);
+    doc.setFontSize(16);
+    doc.text("Payment Receipt", 80, 30);
+
+    doc.setFontSize(12);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 150, 40);
+    doc.text(`Time: ${new Date().toLocaleTimeString()}`, 150, 50);
+    doc.text(`Transaction ID: ${transactionId}`, 20, 60);
+    doc.text(`Product ID: ${product.id || "N/A"}`, 20, 70);
+
+    
+    doc.setFont("helvetica", "normal");
+    doc.text(`Customer Name: ${name}`, 20, 85);
+    doc.text(`Mobile: ${mobile}`, 20, 95);
+    doc.text(`Shipping Address: ${address}`, 20, 105);
+    doc.text(`Payment Method: ${paymentMethod.toUpperCase()}`, 20, 115);
+    if (paymentMethod === "google_upi") doc.text(`UPI ID: ${upiId}`, 20, 125);
+
+    doc.setFont("helvetica", "bold");
+    doc.text("Product Details:", 20, 140);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Product: ${product.productName}`, 20, 150);
+    doc.text(`Price: ₹${product.price}`, 20, 160);
+
+    doc.setFont("helvetica", "bold");
+    doc.text(`Total Amount Paid: ₹${product.price}`, 20, 180);
+
+    doc.setFontSize(10);
+    doc.text(contactInfo, 20, 200);
+
+    doc.save("Payment_Receipt.pdf");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,6 +84,7 @@ const Paymentss = () => {
       return;
     }
 
+    generateReceipt();
     alert(`Payment Successful using ${paymentMethod.toUpperCase()}`);
     navigate("/home");
   };
@@ -42,7 +92,7 @@ const Paymentss = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>Secure Payment</h2>
+      <h2 style={styles.title}>Payment Page</h2>
 
         <div style={styles.productInfo}>
           <img src={product.image} alt={product.productName} style={styles.productImage} />
@@ -52,125 +102,53 @@ const Paymentss = () => {
 
         <form onSubmit={handleSubmit} style={styles.form}>
           <h3 style={styles.subTitle}>Personal Details</h3>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <input
-            type="text"
-            placeholder="Mobile Number"
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
-            required
-            style={styles.input}
-          />
-          <textarea
-            placeholder="Shipping Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-            style={styles.textarea}
-          />
+          <input type="text" placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} required style={styles.input} />
+          <input type="text" placeholder="Mobile Number" value={mobile} onChange={(e) => setMobile(e.target.value)} required style={styles.input} />
+          <textarea placeholder="Shipping Address" value={address} onChange={(e) => setAddress(e.target.value)} required style={styles.textarea} />
 
           <h3 style={styles.subTitle}>Payment Method</h3>
           <div style={styles.paymentOptions}>
             <label style={styles.radioLabel}>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="card"
-                checked={paymentMethod === "card"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />{" "}
-              Card
+              <input type="radio" name="paymentMethod" value="card" checked={paymentMethod === "card"} onChange={(e) => setPaymentMethod(e.target.value)} /> Card
             </label>
             <label style={styles.radioLabel}>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="google_upi"
-                checked={paymentMethod === "google_upi"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />{" "}
-              Google Pay (UPI)
+              <input type="radio" name="paymentMethod" value="google_upi" checked={paymentMethod === "google_upi"} onChange={(e) => setPaymentMethod(e.target.value)} /> Google Pay (UPI)
             </label>
-            <label style={styles.radioLabel}>
-              <input
-                type="radio"
-                name="paymentMethod"
-                value="gpay_qr"
-                checked={paymentMethod === "gpay_qr"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />{" "}
-              GPay QR Code
+            <label>
+              <input type="radio" value="GPay" checked={paymentMethod === "GPay"} onChange={() => setPaymentMethod("GPay")} /> G-Pay QR Code
             </label>
           </div>
 
           {paymentMethod === "card" && (
             <div>
-              <input
-                type="text"
-                placeholder="Card Number"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                required
-                style={styles.input}
-              />
-              <input
-                type="text"
-                placeholder="Expiry Date (MM/YY)"
-                value={expiry}
-                onChange={(e) => setExpiry(e.target.value)}
-                required
-                style={styles.input}
-              />
-              <input
-                type="password"
-                placeholder="CVV"
-                value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
-                required
-                style={styles.input}
-              />
+              <input type="text" placeholder="Card Number" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} required style={styles.input} />
+              <input type="text" placeholder="Expiry Date (MM/YY)" value={expiry} onChange={(e) => setExpiry(e.target.value)} required style={styles.input} />
+              <input type="password" placeholder="CVV" value={cvv} onChange={(e) => setCvv(e.target.value)} required style={styles.input} />
             </div>
           )}
 
           {paymentMethod === "google_upi" && (
-            <input
-              type="text"
-              placeholder="Google Pay UPI ID"
-              value={upiId}
-              onChange={(e) => setUpiId(e.target.value)}
-              required
-              style={styles.input}
-            />
+            <input type="text" placeholder="Google Pay UPI ID" value={upiId} onChange={(e) => setUpiId(e.target.value)} required style={styles.input} />
           )}
 
-          {paymentMethod === "gpay_qr" && (
-            <div style={styles.qrContainer}>
-              <p>Scan the QR Code with Google Pay</p>
-              <img 
-  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=yourupiid@upi" 
-  alt="GPay QR Code" 
-  style={styles.qrImage} 
-/>
+{paymentMethod === "GPay" && (
+  <div style={styles.qrContainer}>
+    <p style={styles.qrText}>Scan QR Code to Pay via Google Pay:</p>
+    <img 
+      src={`https://api.qrserver.com/v1/create-qr-code/?size=225x225&data=upi://pay?pa=9876543210@okhdfcbank&pn=TechGadgets&mc=0000&tid=TXN${Math.floor(Math.random() * 1000000)}&tr=ORDER${Math.floor(Math.random() * 100000)}&tn=Purchase%20from%20TechGadgets&cu=INR&am=${product.price}`} 
+      alt="Google Pay QR Code" 
+      style={styles.qrImage} 
+    />
+    <p style={styles.qrNote}>Use Google Pay, PhonePe, or any UPI app to scan & pay.</p>
+  </div>
+)}
 
-            </div>
-          )}
-
-          <button type="submit" style={styles.button}>
-            Confirm & Pay
-          </button>
+          <button type="submit" style={styles.button}>Confirm & Pay</button>
         </form>
       </div>
     </div>
   );
 };
-
 const styles = {
   container: {
     display: "flex",
@@ -228,7 +206,6 @@ const styles = {
     padding: "10px",
     marginBottom: "10px",
     borderRadius: "5px",
-    
     border: "1px solid #ccc",
   },
   textarea: {
@@ -247,16 +224,30 @@ const styles = {
   radioLabel: {
     fontSize: "16px",
     color: "#333",
+    
   },
   qrContainer: {
     textAlign: "center",
-    marginBottom: "20px",
+    padding: "20px",
+    backgroundColor: "#fff",
+    borderRadius: "10px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.2)",
+    marginTop: "20px",
+  },
+  qrText: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    marginBottom: "10px",
   },
   qrImage: {
-    width: "150px",
-    height: "150px",
-    display: "block",
-    margin: "0 auto",
+    width: "225px",
+    height: "225px",
+    borderRadius: "10px",
+  },
+  qrNote: {
+    fontSize: "14px",
+    color: "#555",
+    marginTop: "10px",
   },
   button: {
     padding: "12px",
@@ -269,5 +260,4 @@ const styles = {
     transition: "background-color 0.3s ease",
   },
 };
-
 export default Paymentss;
