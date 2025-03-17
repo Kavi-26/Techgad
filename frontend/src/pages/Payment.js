@@ -292,10 +292,12 @@ const styles = {
     display: "inline-block",
     padding: "30px",
     borderRadius: "15px",
-    backgroundColor: "#fff",
     boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
     textAlign: "left",
     width: "420px",
+      backgroundColor: "rgba(255, 255, 255, 0.3)", // Semi-transparent form
+      backdropFilter: "blur(15px)", // Glassmorphism effect
+      border: "1px solid rgba(255, 255, 255, 0.2)",
   },
   image: {
     width: "100%",
@@ -405,13 +407,16 @@ const styles = {
     zIndex: "-1",
   },
   overlay: {
-    position: "relative",
-    background: "rgba(0, 0, 0, 0.4)", // Dark overlay for readability
-    color: "#fff",
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    minHeight: "100vh", // Ensure content expands naturally
+    justifyContent: "center",
+    alignItems: "center",
+    backdropFilter: "blur(6px)", // Blur effect for readability
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // Slight overlay for contrast
   },
 };
 
